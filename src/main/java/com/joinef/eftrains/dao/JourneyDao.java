@@ -1,4 +1,4 @@
-package dao;
+package com.joinef.eftrains.dao;
 
 import org.joda.time.DateTime;
 

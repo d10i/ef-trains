@@ -1,4 +1,4 @@
-package service;
+package com.joinef.eftrains.service;
 
 /**
  * Created by Jamie on 07/02/2015.

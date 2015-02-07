@@ -1,4 +1,4 @@
-package entity;
+package com.joinef.eftrains.entity;
 
 import org.joda.time.DateTime;
 

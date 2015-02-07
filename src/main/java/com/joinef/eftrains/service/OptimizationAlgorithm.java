@@ -1,6 +1,6 @@
-package service;
+package com.joinef.eftrains.service;
 
-import entity.Journey;
+import com.joinef.eftrains.entity.Journey;
 
 import java.util.List;
 

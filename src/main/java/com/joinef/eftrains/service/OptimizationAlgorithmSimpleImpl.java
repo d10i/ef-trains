@@ -1,7 +1,7 @@
-package service;
+package com.joinef.eftrains.service;
 
-import dao.JourneyDao;
-import entity.Journey;
+import com.joinef.eftrains.dao.JourneyDao;
+import com.joinef.eftrains.entity.Journey;
 
 import java.util.List;
 
