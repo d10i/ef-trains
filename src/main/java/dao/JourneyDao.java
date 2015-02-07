@@ -8,4 +8,6 @@ import org.joda.time.DateTime;
 public interface JourneyDao {
 
     float find(int startStation, int endStation, DateTime departureTime);
+
+    int countStations();
 }
