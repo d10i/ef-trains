@@ -3,21 +3,22 @@ package service;
 import dao.JourneyDao;
 import entity.Journey;
 
+import java.util.List;
+
 /**
  * Created by dario.simonetti on 07/02/2015.
  */
 public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
 
-    @AutoWired
+    //@AutoWired
     private JourneyDao journeyDao;
 
     private float[][] weights;
 
-    @java.lang.Override
+    @Override
     public List<List<Journey>> performOptimization(int startStation, int endStation) {
         return null;
-
-        //journey.find()
+        //for(int i =0; i < )
         
     }
 
