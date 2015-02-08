@@ -1,6 +1,7 @@
 package com.joinef.eftrains.entity;
 
 import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 
 /**
  * Created by Jamie on 07/02/2015.
@@ -63,6 +64,11 @@ public class Journey {
 
     public void setArrivalTime(DateTime arrivalTime) {
         this.arrivalTime = arrivalTime;
+    }
+
+    public float getDuration()
+    {
+        return Minutes.minutesBetween(arrivalTime, departureTime).getMinutes();
     }
 
     @java.lang.Override

@@ -38,13 +38,21 @@ public class Vertex implements Comparable<Vertex> {
         return Double.compare(minDistance, other.minDistance);
     }
 
-    public List<Edge> getAdjacencies(Map<String, Vertex> vertices) {
-        if (adjacencies.size() != 0) return adjacencies;
+    public List<Edge> getAdjacencies(Map<String, Vertex> vertices, OptimizationType typeOfOptimization) {
+        //if (adjacencies.size() != 0) return adjacencies;
 
         HashMap<String, Journey> journeys = journeyService.findFrom(id, null);
 
         for (Map.Entry<String, Journey> journeyEntry : journeys.entrySet()) {
-            adjacencies.add(new Edge(vertices.get(journeyEntry.getKey()), journeyEntry.getValue().getPrice()));
+            switch (typeOfOptimization) {
+                case Price:
+                adjacencies.add(new Edge(vertices.get(journeyEntry.getKey()), journeyEntry.getValue().getPrice()));
+                break;
+
+                case Duration:
+                    adjacencies.add(new Edge(vertices.get(journeyEntry.getKey()), journeyEntry.getValue().getDuration()));
+                    break;
+            }
         }
 
         return adjacencies;

@@ -1,16 +1,13 @@
 package com.joinef.eftrains.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Created by Jamie on 07/02/2015.
  */
 public class Dijkstra {
 
-    public static void computePaths(Vertex source, List<Vertex> vertices) {
+    public static void computePaths(Vertex source, Map<String, Vertex> vertices, OptimizationType optimizationType) {
         source.minDistance = 0.;
         PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
         vertexQueue.add(source);
@@ -19,7 +16,7 @@ public class Dijkstra {
             Vertex u = vertexQueue.poll();
 
             // Visit each edge exiting u
-            for (Edge e : u.getAdjacencies(vertices)) {
+            for (Edge e : u.getAdjacencies(vertices, optimizationType)) {
                 Vertex v = e.target;
                 double weight = e.weight;
                 double distanceThroughU = u.minDistance + weight;
