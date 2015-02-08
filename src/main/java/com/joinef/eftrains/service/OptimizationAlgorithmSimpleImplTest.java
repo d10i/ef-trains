@@ -1,6 +1,5 @@
 package com.joinef.eftrains.service;
 
-import com.joinef.eftrains.dao.JourneyDao;
 import com.joinef.eftrains.entity.Journey;
 import junit.framework.Assert;
 import org.joda.time.DateTime;
@@ -15,9 +14,7 @@ import org.mockito.stubbing.Answer;
 
 import java.util.List;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,14 +22,14 @@ public class OptimizationAlgorithmSimpleImplTest {
 
 
     @Mock
-    private JourneyDao journeyDao;
+    private JourneyService journeyService;
 
     private OptimizationAlgorithmSimpleImpl optimizationAlgorithm;
 
     @Before
     public void setUp() throws Exception {
         optimizationAlgorithm = new OptimizationAlgorithmSimpleImpl();
-        optimizationAlgorithm.setJourneyDao(journeyDao);
+        optimizationAlgorithm.setJourneyService(journeyService);
     }
 
     @After
@@ -42,25 +39,25 @@ public class OptimizationAlgorithmSimpleImplTest {
 
     @Test
     public void testPerformOptimization() throws Exception {
-        when(journeyDao.find(eq(0), eq(1), any(DateTime.class))).thenReturn(1f);
-        when(journeyDao.find(eq(0), eq(2), any(DateTime.class))).thenReturn(7f);
-        when(journeyDao.find(eq(1), eq(2), any(DateTime.class))).thenReturn(1f);
-        when(journeyDao.find(eq(1), eq(3), any(DateTime.class))).thenReturn(7f);
-        when(journeyDao.find(eq(2), eq(3), any(DateTime.class))).thenReturn(1f);
+        when(journeyService.find(eq(0), eq(1), any(DateTime.class))).thenReturn(1f);
+        when(journeyService.find(eq(0), eq(2), any(DateTime.class))).thenReturn(7f);
+        when(journeyService.find(eq(1), eq(2), any(DateTime.class))).thenReturn(1f);
+        when(journeyService.find(eq(1), eq(3), any(DateTime.class))).thenReturn(7f);
+        when(journeyService.find(eq(2), eq(3), any(DateTime.class))).thenReturn(1f);
 
-        when(journeyDao.find(eq(1), eq(0), any(DateTime.class))).thenReturn(1f);
-        when(journeyDao.find(eq(2), eq(0), any(DateTime.class))).thenReturn(7f);
-        when(journeyDao.find(eq(2), eq(1), any(DateTime.class))).thenReturn(1f);
-        when(journeyDao.find(eq(3), eq(1), any(DateTime.class))).thenReturn(7f);
-        when(journeyDao.find(eq(3), eq(2), any(DateTime.class))).thenReturn(1f);
+        when(journeyService.find(eq(1), eq(0), any(DateTime.class))).thenReturn(1f);
+        when(journeyService.find(eq(2), eq(0), any(DateTime.class))).thenReturn(7f);
+        when(journeyService.find(eq(2), eq(1), any(DateTime.class))).thenReturn(1f);
+        when(journeyService.find(eq(3), eq(1), any(DateTime.class))).thenReturn(7f);
+        when(journeyService.find(eq(3), eq(2), any(DateTime.class))).thenReturn(1f);
 
-        when(journeyDao.find(eq(0), eq(3), any(DateTime.class))).thenReturn(Float.NaN);
-        when(journeyDao.find(eq(0), eq(0), any(DateTime.class))).thenReturn(Float.NaN);
-        when(journeyDao.find(eq(1), eq(1), any(DateTime.class))).thenReturn(Float.NaN);
-        when(journeyDao.find(eq(2), eq(2), any(DateTime.class))).thenReturn(Float.NaN);
-        when(journeyDao.find(eq(3), eq(3), any(DateTime.class))).thenReturn(Float.NaN);
+        when(journeyService.find(eq(0), eq(3), any(DateTime.class))).thenReturn(Float.NaN);
+        when(journeyService.find(eq(0), eq(0), any(DateTime.class))).thenReturn(Float.NaN);
+        when(journeyService.find(eq(1), eq(1), any(DateTime.class))).thenReturn(Float.NaN);
+        when(journeyService.find(eq(2), eq(2), any(DateTime.class))).thenReturn(Float.NaN);
+        when(journeyService.find(eq(3), eq(3), any(DateTime.class))).thenReturn(Float.NaN);
 
-        when(journeyDao.countStations()).thenReturn(4);
+        when(journeyService.countStations()).thenReturn(4);
 
         List<List<Journey>> journeys =  optimizationAlgorithm.performOptimization(0, 3);
         List<Journey> route = journeys.get(0);
@@ -76,14 +73,14 @@ public class OptimizationAlgorithmSimpleImplTest {
 
         int testCount = 1000;
 
-        when(journeyDao.find(anyInt(), anyInt(), any(DateTime.class))).thenAnswer(new Answer<Float>(){
+        when(journeyService.find(anyInt(), anyInt(), any(DateTime.class))).thenAnswer(new Answer<Float>() {
 
             @Override
             public Float answer(InvocationOnMock invocationOnMock) throws Throwable {
-                int i = (Integer)invocationOnMock.getArguments()[0];
-                int j = (Integer)invocationOnMock.getArguments()[1];
+                int i = (Integer) invocationOnMock.getArguments()[0];
+                int j = (Integer) invocationOnMock.getArguments()[1];
 
-                if(j == i+1 || j == i+2) {
+                if (j == i + 1 || j == i + 2) {
                     return 1.0f;
                 }
 
@@ -94,17 +91,17 @@ public class OptimizationAlgorithmSimpleImplTest {
         for(int i =0; i < testCount; i++) {
             for (int j = 0; j < testCount; j++) {
                 if(j == i+1 || j == i+2) {
-                    when(journeyDao.find(eq(i), eq(j), any(DateTime.class))).thenReturn(1f);
-                    when(journeyDao.find(eq(j), eq(i), any(DateTime.class))).thenReturn(1f);
+                    when(journeyService.find(eq(i), eq(j), any(DateTime.class))).thenReturn(1f);
+                    when(journeyService.find(eq(j), eq(i), any(DateTime.class))).thenReturn(1f);
                     continue;
                 }
 
-                when(journeyDao.find(eq(i), eq(j), any(DateTime.class))).thenReturn(Float.NaN);
-                when(journeyDao.find(eq(j), eq(i), any(DateTime.class))).thenReturn(Float.NaN);
+                when(journeyService.find(eq(i), eq(j), any(DateTime.class))).thenReturn(Float.NaN);
+                when(journeyService.find(eq(j), eq(i), any(DateTime.class))).thenReturn(Float.NaN);
             }
         }
 */
-        when(journeyDao.countStations()).thenReturn(testCount);
+        when(journeyService.countStations()).thenReturn(testCount);
 
         List<List<Journey>> journeys =  optimizationAlgorithm.performOptimization(0, testCount - 1);
         List<Journey> route = journeys.get(0);

@@ -1,7 +1,7 @@
 package com.joinef.eftrains.service;
 
-import com.joinef.eftrains.dao.JourneyDao;
 import com.joinef.eftrains.entity.Journey;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
 
-    //@AutoWired
-    private JourneyDao journeyDao;
+    @Autowired
+    private JourneyService journeyService;
 
     private float[][] weights;
 
@@ -71,7 +71,7 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
 
     private void populateWeights()
     {
-        int stationCount = journeyDao.countStations();
+        int stationCount = journeyService.countStations();
         weights = new float[stationCount][];
 
         for(int i =0; i < stationCount; i++)
@@ -80,12 +80,12 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
 
             for(int j =0; j < stationCount; j++)
             {
-                weights[i][j] = journeyDao.find( i, j, null);
+                weights[i][j] = journeyService.find(i, j, null);
             }
         }
     }
 
-    public void setJourneyDao(JourneyDao journeyDao) {
-        this.journeyDao = journeyDao;
+    public void setJourneyService(JourneyService journeyService) {
+        this.journeyService = journeyService;
     }
 }
