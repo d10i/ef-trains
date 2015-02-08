@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jamie on 07/02/2015.
@@ -21,12 +21,12 @@ public class JourneyDaoImpl implements JourneyDao {
     private DataSource dataSource;
 
     @Override
-    public Map<String, Journey> findFrom(String departureStation, DateTime departureTime) {
+    public List<Journey> findFrom(String departureStation, DateTime departureTime) {
         String sql = "SELECT * FROM journey WHERE departure_station = ?";
 
         Connection conn = null;
 
-        Map<String, Journey> journeys = new HashMap<>();
+        List<Journey> journeys = new ArrayList<>();
 
         try {
             conn = dataSource.getConnection();
@@ -42,7 +42,7 @@ public class JourneyDaoImpl implements JourneyDao {
                         departureTime(parseDateTime(rs.getTimestamp("departure_time"))).
                         arrivalTime(parseDateTime(rs.getTimestamp("arrival_time"))).
                         build();
-                journeys.put(journey.getArrivalStation(), journey);
+                journeys.add(journey);
             }
             rs.close();
             ps.close();

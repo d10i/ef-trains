@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by dario.simonetti on 08/02/2015.
@@ -46,6 +47,12 @@ public class StationDaoImpl implements StationDao {
                 }
             }
         }
+    }
+
+    @Override
+    public List<String> findAllKeys() {
+        // TODO
+        return null;
     }
 
     public void setDataSource(DataSource dataSource) {

@@ -1,5 +1,6 @@
 package com.joinef.eftrains.service;
 
+import com.joinef.eftrains.dao.StationDao;
 import com.joinef.eftrains.entity.Journey;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,35 +15,20 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
     @Autowired
     private JourneyService journeyService;
 
+    @Autowired
+    private StationDao stationDao;
+
     @Override
     public List<List<Journey>> performOptimization(int startStation, int endStation) {
 
-        //populateWeights();
-        int stationCount = journeyService.countStations();
+        List<String> stationKeys = stationDao.findAllKeys();
 
         List<Vertex> vertices = new ArrayList<Vertex>();
 
-        for(int i =0; i < stationCount; i++) {
-            Vertex vertex = new Vertex(i, journeyService);
+        for (String stationKey : stationKeys) {
+            Vertex vertex = new Vertex(stationKey, journeyService);
             vertices.add(vertex);
         }
-
-        /* for(int i =0; i < stationCount; i++)
-        {
-            List<Edge> edges = new ArrayList<Edge>();
-
-            for(int j =0; j < stationCount; j++)
-            {
-                if(!Float.isNaN(weights[i][j]))
-                {
-                    Vertex targetVertex = vertices.get(j);
-                    //edges.add(new Edge(targetVertex, weights[i][j]));
-                }
-            }
-
-            vertices.get(i).adjacencies = edges;
-        }
-        */
 
         Vertex startVertex = vertices.get(startStation);
         Vertex endVertex = vertices.get(endStation);
@@ -58,32 +44,14 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
         int pathSize = finalPath.size();
         for(int i =0; i < pathSize - 1; i++)
         {
-            int stationOne = finalPath.get(i).id;
-            int stationTwo = finalPath.get(i + 1).id;
+            String stationOne = finalPath.get(i).id;
+            String stationTwo = finalPath.get(i + 1).id;
 
             result.add(journeyService.findFrom(stationOne, null).get(stationTwo));
         }
 
         return output;
     }
-
-    /*
-    private void populateWeights()
-    {
-        int stationCount = journeyService.countStations();
-        weights = new float[stationCount][];
-
-        for(int i =0; i < stationCount; i++)
-        {
-            weights[i] = new float[stationCount];
-
-            for(int j =0; j < stationCount; j++)
-            {
-                weights[i][j] = journeyService.find(i, j, null);
-            }
-        }
-    }
-    */
 
     public void setJourneyService(JourneyService journeyService) {
         this.journeyService = journeyService;

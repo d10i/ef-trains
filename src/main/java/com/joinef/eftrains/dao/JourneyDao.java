@@ -4,7 +4,7 @@ import com.joinef.eftrains.entity.Journey;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by Jamie on 07/02/2015.
@@ -12,5 +12,5 @@ import java.util.Map;
 @Repository
 public interface JourneyDao {
 
-    Map<String, Journey> findFrom(String departureStation, DateTime departureTime);
+    List<Journey> findFrom(String departureStation, DateTime departureTime);
 }
