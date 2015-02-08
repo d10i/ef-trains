@@ -67,4 +67,8 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
     public void setJourneyService(JourneyService journeyService) {
         this.journeyService = journeyService;
     }
+
+    public void setStationDao(StationDao stationDao) {
+        this.stationDao = stationDao;
+    }
 }
