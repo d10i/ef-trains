@@ -150,6 +150,11 @@ public class RouteRepresentation {
             return this;
         }
 
+        public Builder journeys(List<JourneyRepresentation> journeyRepresentations) {
+            this.journeys = journeyRepresentations;
+            return this;
+        }
+
         public RouteRepresentation build() {
             return new RouteRepresentation(this);
         }

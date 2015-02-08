@@ -3,6 +3,7 @@ package com.joinef.eftrains.service;
 import com.joinef.eftrains.dao.StationDao;
 import com.joinef.eftrains.entity.Journey;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Created by dario.simonetti on 07/02/2015.
  */
+@Component
 public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
 
     @Autowired

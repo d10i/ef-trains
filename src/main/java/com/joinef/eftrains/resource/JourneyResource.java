@@ -2,8 +2,8 @@ package com.joinef.eftrains.resource;
 
 import com.joinef.eftrains.api.JourneyRepresentation;
 import com.joinef.eftrains.api.RouteRepresentation;
-import com.joinef.eftrains.dao.JourneyDao;
 import com.joinef.eftrains.entity.Journey;
+import com.joinef.eftrains.service.OptimizationAlgorithm;
 import com.yammer.metrics.annotation.Timed;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -26,43 +26,45 @@ import java.util.List;
 public class JourneyResource {
 
     @Autowired
-    JourneyDao journeyDao;
+    OptimizationAlgorithm optimizationAlgorithm;
 
     @GET
     @Timed
     public List<RouteRepresentation> findJourney(@QueryParam(value = "from") String from, @QueryParam(value = "to") String to) {
-        List<Journey> journeys = journeyDao.findFrom(from, null);
-        JourneyRepresentation journeyRepresentation;
+        List<List<Journey>> optimizedRoutes = optimizationAlgorithm.performOptimization(from, to);
 
-        RouteRepresentation.Builder routeRepresentationBuilder = new RouteRepresentation.Builder();
+        ArrayList<RouteRepresentation> optimizedRoutesRepresentation = new ArrayList<>();
+        List<JourneyRepresentation> journeyRepresentations;
+        for (List<Journey> optimizedRoute : optimizedRoutes) {
+            journeyRepresentations = new ArrayList<>();
+            for (Journey journey : optimizedRoute) {
+                journeyRepresentations.add(journeyToJourneyRepresentation(journey));
+            }
+
+            optimizedRoutesRepresentation.add(routeToRouteRepresentation(optimizedRoute, journeyRepresentations));
+        }
+
+        return optimizedRoutesRepresentation;
+    }
+
+    private RouteRepresentation routeToRouteRepresentation(List<Journey> optimizedRoute, List<JourneyRepresentation> journeyRepresentations) {
+        Journey first = optimizedRoute.get(0);
+        Journey last = optimizedRoute.get(optimizedRoute.size() - 1);
 
         int totalPrice = 0;
-        for (Journey journey : journeys) {
-            journeyRepresentation = new JourneyRepresentation.Builder().
-                    departureStation(journey.getDepartureStation()).
-                    arrivalStation(journey.getArrivalStation()).
-                    price(journey.getPrice()).
-                    departureTime(journey.getDepartureTime()).
-                    arrivalTime(journey.getArrivalTime()).
-                    build();
-            routeRepresentationBuilder.addJourney(journeyRepresentation);
+        for (Journey journey : optimizedRoute) {
             totalPrice += journey.getPrice();
         }
 
-        Journey first = journeys.get(0);
-        Journey last = journeys.get(journeys.size() - 1);
-
-        routeRepresentationBuilder = routeRepresentationBuilder.
+        return new RouteRepresentation.Builder().
                 price(totalPrice).
                 duration(calculateDuration(first.getDepartureTime(), last.getArrivalTime())).
                 departureStation(first.getDepartureStation()).
                 arrivalStation(last.getArrivalStation()).
                 departureTime(first.getDepartureTime()).
-                arrivalTime(last.getArrivalTime());
-
-        ArrayList<RouteRepresentation> journeyRepresentationList = new ArrayList<>();
-        journeyRepresentationList.add(routeRepresentationBuilder.build());
-        return journeyRepresentationList;
+                arrivalTime(last.getArrivalTime()).
+                journeys(journeyRepresentations).
+                build();
     }
 
     private int calculateDuration(DateTime departureTime, DateTime arrivalTime) {
@@ -70,7 +72,17 @@ public class JourneyResource {
             return 0;
         }
 
-        return Minutes.minutesBetween(arrivalTime, departureTime).getMinutes();
+        return Minutes.minutesBetween(departureTime, arrivalTime).getMinutes();
+    }
+
+    private JourneyRepresentation journeyToJourneyRepresentation(Journey journey) {
+        return new JourneyRepresentation.Builder().
+                departureStation(journey.getDepartureStation()).
+                arrivalStation(journey.getArrivalStation()).
+                price(journey.getPrice()).
+                departureTime(journey.getDepartureTime()).
+                arrivalTime(journey.getArrivalTime()).
+                build();
     }
 
     private DateTime addMinutesFromNow(int minutes) {
