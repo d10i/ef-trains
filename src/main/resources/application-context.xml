@@ -7,6 +7,11 @@
 
     <import resource="application-context-main.xml"/>
 
-    <!-- DB stuff -->
+    <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource">
+        <property name="driverClassName" value="#{dropwizard.configuration.dbDriver}"/>
+        <property name="url" value="#{dropwizard.configuration.dbUrl}"/>
+        <property name="username" value="#{dropwizard.configuration.dbUsername}"/>
+        <property name="password" value="#{dropwizard.configuration.dbPassword}"/>
+    </bean>
 
 </beans>
