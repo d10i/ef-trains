@@ -57,13 +57,18 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
         int pathSize = finalPath.size();
         for(int i =0; i < pathSize - 1; i++)
         {
-            int stationOne = finalPath.get(i).id;
-            int stationTwo = finalPath.get(i + 1).id;
+            String stationOne = finalPath.get(i).id;
+            String stationTwo = finalPath.get(i + 1).id;
 
-            result.add(new Journey(journeyService.find(stationOne, stationTwo, null), stationOne, stationTwo, null, null));
+            result.add(
+                    new Journey.Builder().
+                            departureStation(stationOne).
+                            arrivalStation(stationTwo).
+                            price(journeyService.find(stationOne, stationTwo, null)).
+                            build();
         }
 
-        result.add(new Journey(journeyService.find(pathSize-1,endStation, null), finalPath.get(pathSize - 1).id, endStation, null, null));
+        result.add(new Journey(journeyService.find(pathSize - 1, endStation, null), finalPath.get(pathSize - 1).id, endStation, null, null));
 
         return output;
     }

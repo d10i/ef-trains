@@ -10,9 +10,7 @@ import java.util.List;
  */
 interface JourneyService {
 
-    public float find(int startStation, int endStation, DateTime departureTime);
-
-    public List<Journey> findFrom(int startStation, DateTime departureTime);
+    public List<Journey> findFrom(String startStation, DateTime departureTime);
 
     public int countStations();
 }

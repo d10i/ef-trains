@@ -13,14 +13,14 @@ public class JourneyRepresentation {
 
     @JsonProperty
     @NotNull
-    private int departureStation;
+    private String departureStation;
 
     @JsonProperty
     @NotNull
-    private int arrivalStation;
+    private String arrivalStation;
 
     @JsonProperty
-    private double price;
+    private float price;
 
     @JsonProperty
     @JsonDeserialize(using = DetailDateTimeDeserializer.class)
@@ -40,27 +40,27 @@ public class JourneyRepresentation {
         this.arrivalTime = journeyRepresentationBuilder.arrivalTime;
     }
 
-    public int getDepartureStation() {
+    public String getDepartureStation() {
         return departureStation;
     }
 
-    public void setDepartureStation(int departureStation) {
+    public void setDepartureStation(String departureStation) {
         this.departureStation = departureStation;
     }
 
-    public int getArrivalStation() {
+    public String getArrivalStation() {
         return arrivalStation;
     }
 
-    public void setArrivalStation(int arrivalStation) {
+    public void setArrivalStation(String arrivalStation) {
         this.arrivalStation = arrivalStation;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -92,23 +92,23 @@ public class JourneyRepresentation {
     }
 
     public static class Builder {
-        private int departureStation;
-        private int arrivalStation;
-        private double price;
+        private String departureStation;
+        private String arrivalStation;
+        private float price;
         private DateTime departureTime;
         private DateTime arrivalTime;
 
-        public Builder departureStation(int departureStation) {
+        public Builder departureStation(String departureStation) {
             this.departureStation = departureStation;
             return this;
         }
 
-        public Builder arrivalStation(int arrivalStation) {
+        public Builder arrivalStation(String arrivalStation) {
             this.arrivalStation = arrivalStation;
             return this;
         }
 
-        public Builder price(double price) {
+        public Builder price(float price) {
             this.price = price;
             return this;
         }

@@ -2,15 +2,14 @@ package com.joinef.eftrains.dao;
 
 import com.joinef.eftrains.entity.Journey;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Jamie on 07/02/2015.
@@ -22,33 +21,32 @@ public class JourneyDaoImpl implements JourneyDao {
     private DataSource dataSource;
 
     @Override
-    public float find(int startStation, int endStation, DateTime departureTime) {
-        return 0;
-    }
-
-    @Override
-    public List<Journey> findFrom(int startStation, DateTime departureTime) {
-        return null;
-    }
-
-    @Override
-    public int countStations() {
-        String sql = "SELECT COUNT(DISTINCT departure_station) AS stationsCount FROM journeys";
+    public Map<String, Journey> findFrom(String departureStation, DateTime departureTime) {
+        String sql = "SELECT * FROM journey WHERE departure_station = ?";
 
         Connection conn = null;
 
-        int count = Integer.MIN_VALUE;
+        Map<String, Journey> journeys = new HashMap<>();
 
         try {
             conn = dataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, departureStation);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                count = rs.getInt("stationsCount");
+            Journey journey;
+            while (rs.next()) {
+                journey = new Journey.Builder().
+                        departureStation(rs.getString("departure_station")).
+                        arrivalStation(rs.getString("arrival_station")).
+                        price(rs.getFloat("price")).
+                        departureTime(parseDateTime(rs.getTimestamp("departure_time"))).
+                        arrivalTime(parseDateTime(rs.getTimestamp("arrival_time"))).
+                        build();
+                journeys.put(journey.getArrivalStation(), journey);
             }
             rs.close();
             ps.close();
-            return count;
+            return journeys;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -59,6 +57,14 @@ public class JourneyDaoImpl implements JourneyDao {
                 }
             }
         }
+    }
+
+    private DateTime parseDateTime(Timestamp timestamp) {
+        if (timestamp.getTime() <= 0) {
+            return null;
+        }
+
+        return new DateTime(timestamp).withZone(DateTimeZone.forID("Europe/London"));
     }
 
     public void setDataSource(DataSource dataSource) {

@@ -7,52 +7,46 @@ import org.joda.time.DateTime;
  */
 public class Journey {
 
-    public Journey(double price, int departureStation, int arrivalStation, DateTime departureTime, DateTime arrivalTime) {
-        this.price = price;
-        this.departureStation = departureStation;
-        this.arrivalStation = arrivalStation;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
-    }
+    private String departureStation;
 
-    public Journey(double price, int departureStation, int arrivalStation) {
-        this.price = price;
-        this.departureStation = departureStation;
-        this.arrivalStation = arrivalStation;
-    }
+    private String arrivalStation;
 
-    private double price;
-
-    private int departureStation;
-
-    private int arrivalStation;
+    private float price;
 
     private DateTime departureTime;
 
     private DateTime arrivalTime;
 
-    public double getPrice() {
-        return price;
+    public Journey(Builder builder) {
+        this.departureStation = builder.departureStation;
+        this.arrivalStation = builder.arrivalStation;
+        this.price = builder.price;
+        this.departureTime = builder.departureTime;
+        this.arrivalTime = builder.arrivalTime;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getDepartureStation() {
+    public String getDepartureStation() {
         return departureStation;
     }
 
-    public void setDepartureStation(int departureStation) {
+    public void setDepartureStation(String departureStation) {
         this.departureStation = departureStation;
     }
 
-    public int getArrivalStation() {
+    public String getArrivalStation() {
         return arrivalStation;
     }
 
-    public void setArrivalStation(int arrivalStation) {
+    public void setArrivalStation(String arrivalStation) {
         this.arrivalStation = arrivalStation;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     public DateTime getDepartureTime() {
@@ -80,5 +74,42 @@ public class Journey {
                 ", departureTime=" + departureTime +
                 ", arrivalTime=" + arrivalTime +
                 '}';
+    }
+
+    public static class Builder {
+        private String departureStation;
+        private String arrivalStation;
+        private float price;
+        private DateTime departureTime;
+        private DateTime arrivalTime;
+
+        public Builder departureStation(String departureStation) {
+            this.departureStation = departureStation;
+            return this;
+        }
+
+        public Builder arrivalStation(String arrivalStation) {
+            this.arrivalStation = arrivalStation;
+            return this;
+        }
+
+        public Builder price(float price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder departureTime(DateTime departureTime) {
+            this.departureTime = departureTime;
+            return this;
+        }
+
+        public Builder arrivalTime(DateTime arrivalTime) {
+            this.arrivalTime = arrivalTime;
+            return this;
+        }
+
+        public Journey build() {
+            return new Journey(this);
+        }
     }
 }

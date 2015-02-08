@@ -39,25 +39,21 @@ public class JourneyServiceImpl implements JourneyService {
 
     public float find(int startStation, int endStation, DateTime departureTime) {
 
-        if(Float.isInfinite(weights[startStation][endStation]))
-        {
+        if (Float.isInfinite(weights[startStation][endStation])) {
             weights[startStation][endStation] = journeyDao.find(startStation, endStation, departureTime);
         }
 
         return weights[startStation][endStation];
     }
 
-    public List<Journey> findFrom(int departureStation, DateTime departureTime)
-    {
+    public List<Journey> findFrom(int departureStation, DateTime departureTime) {
         List<Journey> journeys = new ArrayList<Journey>();
 
-        for(int i =0; i < stationCount; i++) {
-            if(i != departureStation)
-            {
+        for (int i = 0; i < stationCount; i++) {
+            if (i != departureStation) {
                 float weight = find(departureStation, i, departureTime);
 
-                if(!Float.isNaN(weight))
-                {
+                if (!Float.isNaN(weight)) {
                     journeys.add(new Journey(weight, departureStation, i, departureTime, null));
                 }
             }

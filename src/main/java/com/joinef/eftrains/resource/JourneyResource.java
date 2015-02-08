@@ -1,9 +1,12 @@
 package com.joinef.eftrains.resource;
 
 import com.joinef.eftrains.api.JourneyRepresentation;
+import com.joinef.eftrains.dao.JourneyDao;
+import com.joinef.eftrains.entity.Journey;
 import com.yammer.metrics.annotation.Timed;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
@@ -20,10 +23,27 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class JourneyResource {
 
+    @Autowired
+    JourneyDao journeyDao;
+
     @GET
     @Timed
-    public List<List<JourneyRepresentation>> findJourney(@QueryParam(value = "from") int from, @QueryParam(value = "to") int to) {
-        JourneyRepresentation journeyRepresentation1 = new JourneyRepresentation.Builder().
+    public List<List<JourneyRepresentation>> findJourney(@QueryParam(value = "from") String from, @QueryParam(value = "to") String to) {
+        List<Journey> journeys = journeyDao.findFrom(from, null);
+        List<JourneyRepresentation> optimitedJourneyRepresentation = new ArrayList<>();
+        JourneyRepresentation journeyRepresentation;
+        for (Journey journey : journeys) {
+            journeyRepresentation = new JourneyRepresentation.Builder().
+                    departureStation(journey.getDepartureStation()).
+                    arrivalStation(journey.getArrivalStation()).
+                    price(journey.getPrice()).
+                    departureTime(journey.getDepartureTime()).
+                    arrivalTime(journey.getArrivalTime()).
+                    build();
+            optimitedJourneyRepresentation.add(journeyRepresentation);
+        }
+
+        /*JourneyRepresentation journeyRepresentation1 = new JourneyRepresentation.Builder().
                 departureStation(from).
                 arrivalStation(2).
                 price(15.5d).
@@ -40,10 +60,10 @@ public class JourneyResource {
 
         ArrayList<JourneyRepresentation> optimitedJourneyRepresentation = new ArrayList<JourneyRepresentation>();
         optimitedJourneyRepresentation.add(journeyRepresentation1);
-        optimitedJourneyRepresentation.add(journeyRepresentation2);
+        optimitedJourneyRepresentation.add(journeyRepresentation2);*/
 
 
-        ArrayList<List<JourneyRepresentation>> journeyRepresentationList = new ArrayList<List<JourneyRepresentation>>();
+        ArrayList<List<JourneyRepresentation>> journeyRepresentationList = new ArrayList<>();
         journeyRepresentationList.add(optimitedJourneyRepresentation);
 
         return journeyRepresentationList;
