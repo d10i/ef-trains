@@ -59,7 +59,7 @@ public class OptimizationAlgorithmSimpleImplTest {
             @Override
             public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 HashMap<String, Journey> journeys = new HashMap<>();
-                journeys.put("1", new Journey.Builder().departureStation("0").arrivalStation("1").price(1).build());
+                journeys.put("1", new Journey.Builder().departureStation("0").arrivalStation("1").price(1).departureTime(new DateTime(2015,1,1,12,10,15)).build());
                 journeys.put("2", new Journey.Builder().departureStation("0").arrivalStation("2").price(7.0f).build());
                 return journeys;
             }
@@ -97,7 +97,7 @@ public class OptimizationAlgorithmSimpleImplTest {
             }
         });
 
-        List<List<Journey>> journeys = optimizationAlgorithm.performOptimization(0, 3);
+        List<List<Journey>> journeys = optimizationAlgorithm.performOptimization("0", "3");
         List<Journey> route = journeys.get(0);
         Assert.assertEquals(route.get(0).getDepartureStation(), 0);
         Assert.assertEquals(route.get(1).getDepartureStation(), 1);
@@ -140,8 +140,81 @@ public class OptimizationAlgorithmSimpleImplTest {
 
         when(stationDao.count()).thenReturn(testCount);
 
-        List<List<Journey>> journeys = optimizationAlgorithm.performOptimization(0, testCount - 1);
+        List<List<Journey>> journeys = optimizationAlgorithm.performOptimization("0", Integer.toString(testCount - 1));
         List<Journey> route = journeys.get(0);
         Assert.assertEquals(route.get(route.size() - 1).getDepartureStation(), testCount - 1);
+    }
+
+    @Test
+    public void testDjikstraDuration()
+    {
+        Vertex startVertex = new Vertex("0",journeyService);
+        Vertex endVertex = new Vertex("3",journeyService);
+        Vertex mid1Vertex = new Vertex("1",journeyService);
+        Vertex mid2Vertex = new Vertex("2",journeyService);
+
+        HashMap<String, Vertex> vertices = new HashMap<String, Vertex>();
+
+        vertices.put("0", startVertex);
+        vertices.put("1", mid1Vertex);
+        vertices.put("2", mid2Vertex);
+        vertices.put("3", endVertex);
+
+        when(journeyService.findFrom(eq("0"), any(DateTime.class))).thenAnswer(new Answer<HashMap<String, Journey>>() {
+            @Override
+            public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
+                HashMap<String, Journey> journeys = new HashMap<>();
+                journeys.put("1", new Journey.Builder().departureStation("0").arrivalStation("1").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 1)).build());
+                journeys.put("2", new Journey.Builder().departureStation("0").arrivalStation("2").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 7)).build());
+                return journeys;
+            }
+        });
+
+        when(journeyService.findFrom(eq("1"), any(DateTime.class))).thenAnswer(new Answer<HashMap<String, Journey>>() {
+            @Override
+            public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
+                HashMap<String, Journey> journeys = new HashMap<>();
+                journeys.put("0", new Journey.Builder().departureStation("1").arrivalStation("0").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 1)).build());
+                journeys.put("2", new Journey.Builder().departureStation("1").arrivalStation("2").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 1)).build());
+                journeys.put("3", new Journey.Builder().departureStation("1").arrivalStation("3").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 7)).build());
+                return journeys;
+            }
+        });
+
+        when(journeyService.findFrom(eq("2"), any(DateTime.class))).thenAnswer(new Answer<HashMap<String, Journey>>() {
+            @Override
+            public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
+                HashMap<String, Journey> journeys = new HashMap<>();
+                journeys.put("0", new Journey.Builder().departureStation("2").arrivalStation("0").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 7)).build());
+                journeys.put("3", new Journey.Builder().departureStation("2").arrivalStation("3").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 1)).build());
+                journeys.put("1", new Journey.Builder().departureStation("2").arrivalStation("1").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 1)).build());
+                return journeys;
+            }
+        });
+
+        when(journeyService.findFrom(eq("3"), any(DateTime.class))).thenAnswer(new Answer<HashMap<String, Journey>>() {
+            @Override
+            public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
+                HashMap<String, Journey> journeys = new HashMap<>();
+                journeys.put("1", new Journey.Builder().departureStation("3").arrivalStation("1").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 7)).build());
+                journeys.put("2", new Journey.Builder().departureStation("3").arrivalStation("2").departureTime(new DateTime(2015, 1, 1, 12, 00))
+                        .arrivalTime(new DateTime(2015, 1, 1, 12, 1)).build());
+                return journeys;
+            }
+        });
+
+        List<Journey> route = optimizationAlgorithm.RunDjikstra(startVertex, endVertex, vertices, OptimizationType.Duration);
+        Assert.assertEquals(route.get(0).getDepartureStation(), "0");
+        Assert.assertEquals(route.get(1).getDepartureStation(), "1");
+        Assert.assertEquals(route.get(2).getDepartureStation(), "2");
     }
 }
