@@ -1,5 +1,8 @@
 package com.joinef.eftrains.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Jamie on 07/02/2015.
  */
@@ -7,7 +10,7 @@ public class Vertex implements Comparable<Vertex> {
 
     public final int id;
 
-    public Edge[] adjacencies;
+    public List<Edge> adjacencies;
 
     public double minDistance = Double.POSITIVE_INFINITY;
 
@@ -15,6 +18,7 @@ public class Vertex implements Comparable<Vertex> {
 
     public Vertex(int _id) {
         id = _id;
+        adjacencies = new ArrayList<Edge>();
     }
 
     public String toString() {
