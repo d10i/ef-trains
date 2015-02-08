@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface OptimizationAlgorithm {
 
-    List<List<Journey>> performOptimization(int startStation, int endStation);
+    List<List<Journey>> performOptimization(String startStation, String endStation);
 
 }

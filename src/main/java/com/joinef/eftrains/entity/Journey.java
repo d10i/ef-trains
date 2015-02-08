@@ -68,7 +68,7 @@ public class Journey {
 
     public int getDuration()
     {
-        return Minutes.minutesBetween(arrivalTime, departureTime).getMinutes();
+        return (float)Minutes.minutesBetween(departureTime, arrivalTime).getMinutes();
     }
 
     @java.lang.Override

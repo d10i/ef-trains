@@ -22,7 +22,7 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
     private StationDao stationDao;
 
     @Override
-    public List<List<Journey>> performOptimization(int startStation, int endStation) {
+    public List<List<Journey>> performOptimization(String startStation, String endStation) {
 
         List<String> stationKeys = stationDao.findAllKeys();
 
@@ -46,7 +46,7 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
         return output;
     }
 
-    private List<Journey> RunDjikstra(Vertex startVertex, Vertex endVertex, HashMap<String, Vertex> vertices, OptimizationType optimizationType)
+    public List<Journey> RunDjikstra(Vertex startVertex, Vertex endVertex, HashMap<String, Vertex> vertices, OptimizationType optimizationType)
     {
         Dijkstra.computePaths(startVertex, vertices, optimizationType);
         List<Vertex> finalPath = Dijkstra.getShortestPathTo(endVertex);
