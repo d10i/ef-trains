@@ -29,7 +29,7 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
             vertices.add(vertex);
         }
 
-        for(int i =0; i < stationCount; i++)
+        /* for(int i =0; i < stationCount; i++)
         {
             List<Edge> edges = new ArrayList<Edge>();
 
@@ -38,17 +38,18 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
                 if(!Float.isNaN(weights[i][j]))
                 {
                     Vertex targetVertex = vertices.get(j);
-                    edges.add(new Edge(targetVertex, weights[i][j]));
+                    //edges.add(new Edge(targetVertex, weights[i][j]));
                 }
             }
 
             vertices.get(i).adjacencies = edges;
         }
+        */
 
         Vertex startVertex = vertices.get(startStation);
         Vertex endVertex = vertices.get(endStation);
 
-        Dijkstra.computePaths(startVertex);
+        Dijkstra.computePaths(startVertex, journeyService, vertices);
         List<Vertex> finalPath = Dijkstra.getShortestPathTo(endVertex);
 
         List<List<Journey>> output = new ArrayList<List<Journey>>();

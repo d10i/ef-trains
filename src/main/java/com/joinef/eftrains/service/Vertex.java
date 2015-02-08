@@ -1,5 +1,8 @@
 package com.joinef.eftrains.service;
 
+import com.joinef.eftrains.entity.Journey;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +10,9 @@ import java.util.List;
  * Created by Jamie on 07/02/2015.
  */
 public class Vertex implements Comparable<Vertex> {
+
+    @Autowired
+    private JourneyService journeyService;
 
     public final int id;
 
@@ -27,6 +33,18 @@ public class Vertex implements Comparable<Vertex> {
 
     public int compareTo(Vertex other) {
         return Double.compare(minDistance, other.minDistance);
+    }
+
+    public List<Edge> getAdjacencies()
+    {
+        List<Journey> journeys = journeyService.findFrom(id, null);
+
+        for(int i =0; i < journeys.size(); i++)
+        {
+            //adjacencies.add(new Edge())
+        }
+        
+        return null;
     }
 }
 
