@@ -80,6 +80,64 @@ public class StationDaoImpl implements StationDao {
         }
     }
 
+    @Override
+    public String findByKey(String key) {
+        String sql = "SELECT `name` FROM station WHERE `key` = ?";
+
+        Connection conn = null;
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, key);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+            rs.close();
+            ps.close();
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+    }
+
+    @Override
+    public String findByName(String name) {
+        String sql = "SELECT `key` FROM station WHERE `name` = ?";
+
+        Connection conn = null;
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("key");
+            }
+            rs.close();
+            ps.close();
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+    }
+
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }

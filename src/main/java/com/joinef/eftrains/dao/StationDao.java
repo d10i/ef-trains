@@ -13,4 +13,8 @@ public interface StationDao {
     int count();
 
     List<String> findAllKeys();
+
+    String findByKey(String key);
+
+    String findByName(String name);
 }

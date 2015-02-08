@@ -26,7 +26,15 @@ public class RouteRepresentation {
 
     @JsonProperty
     @NotNull
+    private String departureStationName;
+
+    @JsonProperty
+    @NotNull
     private String arrivalStation;
+
+    @JsonProperty
+    @NotNull
+    private String arrivalStationName;
 
     @JsonProperty
     @JsonDeserialize(using = DetailDateTimeDeserializer.class)
@@ -42,9 +50,12 @@ public class RouteRepresentation {
     List<JourneyRepresentation> journeys;
 
     public RouteRepresentation(Builder routeRepresentationBuilder) {
+        this.price = routeRepresentationBuilder.price;
         this.duration = routeRepresentationBuilder.duration;
         this.departureStation = routeRepresentationBuilder.departureStation;
+        this.departureStationName = routeRepresentationBuilder.departureStationName;
         this.arrivalStation = routeRepresentationBuilder.arrivalStation;
+        this.arrivalStationName = routeRepresentationBuilder.arrivalStationName;
         this.departureTime = routeRepresentationBuilder.departureTime;
         this.arrivalTime = routeRepresentationBuilder.arrivalTime;
         this.journeys = routeRepresentationBuilder.journeys;
@@ -74,12 +85,28 @@ public class RouteRepresentation {
         this.departureStation = departureStation;
     }
 
+    public String getDepartureStationName() {
+        return departureStationName;
+    }
+
+    public void setDepartureStationName(String departureStationName) {
+        this.departureStationName = departureStationName;
+    }
+
     public String getArrivalStation() {
         return arrivalStation;
     }
 
     public void setArrivalStation(String arrivalStation) {
         this.arrivalStation = arrivalStation;
+    }
+
+    public String getArrivalStationName() {
+        return arrivalStationName;
+    }
+
+    public void setArrivalStationName(String arrivalStationName) {
+        this.arrivalStationName = arrivalStationName;
     }
 
     public DateTime getDepartureTime() {
@@ -110,7 +137,9 @@ public class RouteRepresentation {
         private int price;
         private Integer duration;
         private String departureStation;
+        private String departureStationName;
         private String arrivalStation;
+        private String arrivalStationName;
         private DateTime departureTime;
         private DateTime arrivalTime;
         private List<JourneyRepresentation> journeys = new ArrayList<>();
@@ -130,8 +159,18 @@ public class RouteRepresentation {
             return this;
         }
 
+        public Builder departureStationName(String departureStationName) {
+            this.departureStationName = departureStationName;
+            return this;
+        }
+
         public Builder arrivalStation(String arrivalStation) {
             this.arrivalStation = arrivalStation;
+            return this;
+        }
+
+        public Builder arrivalStationName(String arrivalStationName) {
+            this.arrivalStationName = arrivalStationName;
             return this;
         }
 

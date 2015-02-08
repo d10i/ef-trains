@@ -17,7 +17,15 @@ public class JourneyRepresentation {
 
     @JsonProperty
     @NotNull
+    private String departureStationName;
+
+    @JsonProperty
+    @NotNull
     private String arrivalStation;
+
+    @JsonProperty
+    @NotNull
+    private String arrivalStationName;
 
     @JsonProperty
     private int price;
@@ -34,7 +42,9 @@ public class JourneyRepresentation {
 
     public JourneyRepresentation(Builder journeyRepresentationBuilder) {
         this.departureStation = journeyRepresentationBuilder.departureStation;
+        this.departureStationName = journeyRepresentationBuilder.departureStationName;
         this.arrivalStation = journeyRepresentationBuilder.arrivalStation;
+        this.arrivalStationName = journeyRepresentationBuilder.arrivalStationName;
         this.price = journeyRepresentationBuilder.price;
         this.departureTime = journeyRepresentationBuilder.departureTime;
         this.arrivalTime = journeyRepresentationBuilder.arrivalTime;
@@ -48,12 +58,28 @@ public class JourneyRepresentation {
         this.departureStation = departureStation;
     }
 
+    public String getDepartureStationName() {
+        return departureStationName;
+    }
+
+    public void setDepartureStationName(String departureStationName) {
+        this.departureStationName = departureStationName;
+    }
+
     public String getArrivalStation() {
         return arrivalStation;
     }
 
     public void setArrivalStation(String arrivalStation) {
         this.arrivalStation = arrivalStation;
+    }
+
+    public String getArrivalStationName() {
+        return arrivalStationName;
+    }
+
+    public void setArrivalStationName(String arrivalStationName) {
+        this.arrivalStationName = arrivalStationName;
     }
 
     public int getPrice() {
@@ -93,7 +119,9 @@ public class JourneyRepresentation {
 
     public static class Builder {
         private String departureStation;
+        private String departureStationName;
         private String arrivalStation;
+        private String arrivalStationName;
         private int price;
         private DateTime departureTime;
         private DateTime arrivalTime;
@@ -103,8 +131,18 @@ public class JourneyRepresentation {
             return this;
         }
 
+        public Builder departureStationName(String departureStationName) {
+            this.departureStationName = departureStationName;
+            return this;
+        }
+
         public Builder arrivalStation(String arrivalStation) {
             this.arrivalStation = arrivalStation;
+            return this;
+        }
+
+        public Builder arrivalStationName(String arrivalStationName) {
+            this.arrivalStationName = arrivalStationName;
             return this;
         }
 

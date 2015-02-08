@@ -2,6 +2,7 @@ package com.joinef.eftrains.resource;
 
 import com.joinef.eftrains.api.JourneyRepresentation;
 import com.joinef.eftrains.api.RouteRepresentation;
+import com.joinef.eftrains.dao.StationDao;
 import com.joinef.eftrains.entity.Journey;
 import com.joinef.eftrains.service.OptimizationAlgorithm;
 import com.yammer.metrics.annotation.Timed;
@@ -27,6 +28,16 @@ public class JourneyResource {
 
     @Autowired
     OptimizationAlgorithm optimizationAlgorithm;
+
+    @Autowired
+    private StationDao stationDao;
+
+    @GET
+    @Path("/by-name")
+    @Timed
+    public List<RouteRepresentation> findJourneyByNames(@QueryParam(value = "from") String fromName, @QueryParam(value = "to") String toName) {
+        return findJourney(getStationKey(fromName), getStationKey(toName));
+    }
 
     @GET
     @Timed
@@ -66,7 +77,9 @@ public class JourneyResource {
                 price(totalPrice).
                 duration(calculateDuration(first.getDepartureTime(), last.getArrivalTime())).
                 departureStation(first.getDepartureStation()).
+                departureStationName(getStationName(first.getDepartureStation())).
                 arrivalStation(last.getArrivalStation()).
+                arrivalStationName(getStationName(last.getArrivalStation())).
                 departureTime(first.getDepartureTime()).
                 arrivalTime(last.getArrivalTime()).
                 journeys(journeyRepresentations).
@@ -84,14 +97,20 @@ public class JourneyResource {
     private JourneyRepresentation journeyToJourneyRepresentation(Journey journey) {
         return new JourneyRepresentation.Builder().
                 departureStation(journey.getDepartureStation()).
+                departureStationName(getStationName(journey.getDepartureStation())).
                 arrivalStation(journey.getArrivalStation()).
+                arrivalStationName(getStationName(journey.getArrivalStation())).
                 price(journey.getPrice()).
                 departureTime(journey.getDepartureTime()).
                 arrivalTime(journey.getArrivalTime()).
                 build();
     }
 
-    private DateTime addMinutesFromNow(int minutes) {
-        return DateTime.now().plusMinutes(minutes).withSecondOfMinute(0).withMillisOfSecond(0).withZone(DateTimeZone.UTC);
+    private String getStationName(String stationKey) {
+        return stationDao.findByKey(stationKey);
+    }
+
+    private String getStationKey(String stationName) {
+        return stationDao.findByName(stationName);
     }
 }
