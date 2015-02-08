@@ -1,0 +1,25 @@
+http:
+  port: 8080
+  adminPort: 8081
+
+spring:
+  # Spring Context Type (Required)
+  # either "file" or "classpath"
+  appContextType: classpath
+
+  # Spring Config Locations (Required)
+  # The location of one or more beans.xml files
+  configLocations:
+    - application-context.xml
+
+  # JAX-RS Resources (Required if you want your service to do anything)
+  # one or more spring beans that are JAX-RS resources
+  resources:
+    - journeyResource
+
+logging:
+  level: INFO
+  loggers:
+    "com.mongodb": ERROR
+    "org.eclipse": WARN
+    "org.apache.http": WARN
