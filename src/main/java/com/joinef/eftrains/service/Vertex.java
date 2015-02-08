@@ -50,7 +50,7 @@ public class Vertex implements Comparable<Vertex> {
                 break;
 
                 case Duration:
-                    adjacencies.add(new Edge(vertices.get(journeyEntry.getKey()), (float)journeyEntry.getValue().getDuration()));
+                    adjacencies.add(new Edge(vertices.get(journeyEntry.getKey()), journeyEntry.getValue().getDuration()));
                     break;
             }
         }

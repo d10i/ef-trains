@@ -59,8 +59,8 @@ public class OptimizationAlgorithmSimpleImplTest {
             @Override
             public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 HashMap<String, Journey> journeys = new HashMap<>();
-                journeys.put("1", new Journey.Builder().departureStation("0").arrivalStation("1").price(1).departureTime(new DateTime(2015,1,1,12,10,15)).build());
-                journeys.put("2", new Journey.Builder().departureStation("0").arrivalStation("2").price(7).build());
+                journeys.put("1", new Journey.Builder().departureStation("0").arrivalStation("1").price(1).departureTime(new DateTime(2015, 1, 1, 12, 10, 15)).build());
+                journeys.put("2", new Journey.Builder().departureStation("0").arrivalStation("2").price(7).departureTime(new DateTime(2015, 1, 1, 12, 10, 15)).build());
                 journeys.put("1", new Journey.Builder().departureStation("0").arrivalStation("1").price(1).build());
                 journeys.put("2", new Journey.Builder().departureStation("0").arrivalStation("2").price(7).build());
                 return journeys;
@@ -148,12 +148,11 @@ public class OptimizationAlgorithmSimpleImplTest {
     }
 
     @Test
-    public void testDjikstraDuration()
-    {
-        Vertex startVertex = new Vertex("0",journeyService);
-        Vertex endVertex = new Vertex("3",journeyService);
-        Vertex mid1Vertex = new Vertex("1",journeyService);
-        Vertex mid2Vertex = new Vertex("2",journeyService);
+    public void testDjikstraDuration() {
+        Vertex startVertex = new Vertex("0", journeyService);
+        Vertex endVertex = new Vertex("3", journeyService);
+        Vertex mid1Vertex = new Vertex("1", journeyService);
+        Vertex mid2Vertex = new Vertex("2", journeyService);
 
         HashMap<String, Vertex> vertices = new HashMap<String, Vertex>();
 

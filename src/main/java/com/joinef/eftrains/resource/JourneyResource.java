@@ -36,6 +36,12 @@ public class JourneyResource {
         ArrayList<RouteRepresentation> optimizedRoutesRepresentation = new ArrayList<>();
         List<JourneyRepresentation> journeyRepresentations;
         for (List<Journey> optimizedRoute : optimizedRoutes) {
+            for(int i = 0; i < optimizedRoute.size(); i++) {
+                if(optimizedRoute.get(i) == null) {
+                    optimizedRoute.remove(i);
+                }
+            }
+
             journeyRepresentations = new ArrayList<>();
             for (Journey journey : optimizedRoute) {
                 journeyRepresentations.add(journeyToJourneyRepresentation(journey));
