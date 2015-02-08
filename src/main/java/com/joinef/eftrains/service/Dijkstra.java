@@ -11,7 +11,7 @@ import java.util.PriorityQueue;
  */
 public class Dijkstra {
 
-    public static void computePaths(Vertex source, JourneyService journeyService, List<Vertex> vertices) {
+    public static void computePaths(Vertex source, List<Vertex> vertices) {
         source.minDistance = 0.;
         PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
         vertexQueue.add(source);
@@ -20,7 +20,7 @@ public class Dijkstra {
             Vertex u = vertexQueue.poll();
 
             // Visit each edge exiting u
-            for (Edge e : u.getAdjacencies()) {
+            for (Edge e : u.getAdjacencies(vertices)) {
                 Vertex v = e.target;
                 double weight = e.weight;
                 double distanceThroughU = u.minDistance + weight;

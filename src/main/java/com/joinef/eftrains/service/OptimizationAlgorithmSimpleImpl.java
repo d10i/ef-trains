@@ -14,18 +14,16 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
     @Autowired
     private JourneyService journeyService;
 
-    private float[][] weights;
-
     @Override
     public List<List<Journey>> performOptimization(int startStation, int endStation) {
 
-        populateWeights();
-        int stationCount = weights.length;
+        //populateWeights();
+        int stationCount = journeyService.countStations();
 
         List<Vertex> vertices = new ArrayList<Vertex>();
 
         for(int i =0; i < stationCount; i++) {
-            Vertex vertex = new Vertex(i);
+            Vertex vertex = new Vertex(i, journeyService);
             vertices.add(vertex);
         }
 
@@ -49,7 +47,7 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
         Vertex startVertex = vertices.get(startStation);
         Vertex endVertex = vertices.get(endStation);
 
-        Dijkstra.computePaths(startVertex, journeyService, vertices);
+        Dijkstra.computePaths(startVertex, vertices);
         List<Vertex> finalPath = Dijkstra.getShortestPathTo(endVertex);
 
         List<List<Journey>> output = new ArrayList<List<Journey>>();
@@ -62,14 +60,15 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
             int stationOne = finalPath.get(i).id;
             int stationTwo = finalPath.get(i + 1).id;
 
-            result.add(new Journey(weights[stationOne][stationTwo], stationOne, stationTwo, null, null));
+            result.add(new Journey(journeyService.find(stationOne, stationTwo, null), stationOne, stationTwo, null, null));
         }
 
-        result.add(new Journey(weights[pathSize-1][endStation], finalPath.get(pathSize - 1).id, endStation, null, null));
+        result.add(new Journey(journeyService.find(pathSize-1,endStation, null), finalPath.get(pathSize - 1).id, endStation, null, null));
 
         return output;
     }
 
+    /*
     private void populateWeights()
     {
         int stationCount = journeyService.countStations();
@@ -85,6 +84,7 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
             }
         }
     }
+    */
 
     public void setJourneyService(JourneyService journeyService) {
         this.journeyService = journeyService;
