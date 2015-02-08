@@ -1,13 +1,13 @@
 package com.joinef.eftrains.service;
 
+import ch.qos.logback.classic.joran.JoranConfigurator;
 import com.joinef.eftrains.dao.JourneyDao;
 import com.joinef.eftrains.entity.Journey;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by dario.simonetti on 08/02/2015.
@@ -23,43 +23,32 @@ public class JourneyServiceImpl implements JourneyService {
 
     private void Initialise() {
         stationCount = journeyDao.countStations();
-
-        weights = new float[stationCount][];
-        for (int i = 0; i < stationCount; i++) {
-            weights[i] = new float[stationCount];
-            for (int j = 0; j < stationCount; j++) {
-                weights[i][j] = Float.POSITIVE_INFINITY;
-            }
-        }
+        stationsObtained = new Hashtable<Integer, Hashtable<Integer, Journey>>();
     }
-
-    private float[][] weights;
 
     private int stationCount;
 
-    public float find(int startStation, int endStation, DateTime departureTime) {
+    private Hashtable<Integer, Hashtable<Integer, Journey>> stationsObtained;
 
-        if (Float.isInfinite(weights[startStation][endStation])) {
-            weights[startStation][endStation] = journeyDao.find(startStation, endStation, departureTime);
+    public Hashtable<Integer, Journey> findFrom(int departureStation, DateTime departureTime)
+    {
+        if(stationsObtained.containsKey(departureStation))
+        {
+            return stationsObtained.get(departureStation);
         }
 
-        return weights[startStation][endStation];
-    }
+        List<Journey> journeys = journeyDao.findFrom(departureStation, departureTime);
 
-    public List<Journey> findFrom(int departureStation, DateTime departureTime) {
-        List<Journey> journeys = new ArrayList<Journey>();
-
-        for (int i = 0; i < stationCount; i++) {
-            if (i != departureStation) {
-                float weight = find(departureStation, i, departureTime);
-
-                if (!Float.isNaN(weight)) {
-                    journeys.add(new Journey(weight, departureStation, i, departureTime, null));
-                }
-            }
+        Hashtable<Integer, Journey> output = new Hashtable<Integer, Journey>();
+        for(int i =0; i < journeys.size(); i++)
+        {
+            Journey journey = journeys.get(i);
+            output.put(journey.getArrivalStation(), journey);
         }
 
-        return journeys;
+        stationsObtained.put(departureStation, output);
+
+        return output;
     }
 
     public int countStations() {

@@ -3,6 +3,7 @@ package com.joinef.eftrains.service;
 import com.joinef.eftrains.entity.Journey;
 import org.joda.time.DateTime;
 
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  */
 interface JourneyService {
 
-    public List<Journey> findFrom(String startStation, DateTime departureTime);
+    public Hashtable<Integer, Journey> findFrom(int startStation, DateTime departureTime);
 
     public int countStations();
 }

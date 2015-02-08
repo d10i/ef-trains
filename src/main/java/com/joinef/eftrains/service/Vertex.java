@@ -4,6 +4,7 @@ import com.joinef.eftrains.entity.Journey;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -41,9 +42,9 @@ public class Vertex implements Comparable<Vertex> {
     {
         if (adjacencies.size() != 0) return adjacencies;
 
-        List<Journey> journeys = journeyService.findFrom(id, null);
+        Hashtable<Integer, Journey> journeys = journeyService.findFrom(id, null);
 
-        for(int i =0; i < journeys.size(); i++)
+        for(int i : journeys.keySet())
         {
             Journey journey = journeys.get(i);
             adjacencies.add(new Edge(vertices.get(journey.getArrivalStation()), journey.getPrice()));
