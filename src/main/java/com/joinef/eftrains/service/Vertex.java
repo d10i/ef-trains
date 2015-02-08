@@ -22,9 +22,10 @@ public class Vertex implements Comparable<Vertex> {
 
     public Vertex previous;
 
-    public Vertex(int _id) {
+    public Vertex(int _id, JourneyService _journeyService) {
         id = _id;
         adjacencies = new ArrayList<Edge>();
+        journeyService = _journeyService;
     }
 
     public String toString() {
@@ -35,16 +36,19 @@ public class Vertex implements Comparable<Vertex> {
         return Double.compare(minDistance, other.minDistance);
     }
 
-    public List<Edge> getAdjacencies()
+    public List<Edge> getAdjacencies(List<Vertex> vertices)
     {
+        if(adjacencies.size() != 0) return adjacencies;
+
         List<Journey> journeys = journeyService.findFrom(id, null);
 
         for(int i =0; i < journeys.size(); i++)
         {
-            //adjacencies.add(new Edge())
+            Journey journey = journeys.get(i);
+            adjacencies.add(new Edge(vertices.get(journey.getArrivalStation()), journey.getPrice()));
         }
-        
-        return null;
+
+        return adjacencies;
     }
 }
 
