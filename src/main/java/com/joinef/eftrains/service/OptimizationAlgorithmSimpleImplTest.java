@@ -60,7 +60,7 @@ public class OptimizationAlgorithmSimpleImplTest {
             public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 HashMap<String, Journey> journeys = new HashMap<>();
                 journeys.put("1", new Journey.Builder().departureStation("0").arrivalStation("1").price(1).build());
-                journeys.put("2", new Journey.Builder().departureStation("0").arrivalStation("2").price(7.0f).build());
+                journeys.put("2", new Journey.Builder().departureStation("0").arrivalStation("2").price(7).build());
                 return journeys;
             }
         });
@@ -69,9 +69,9 @@ public class OptimizationAlgorithmSimpleImplTest {
             @Override
             public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 HashMap<String, Journey> journeys = new HashMap<>();
-                journeys.put("0", new Journey.Builder().departureStation("1").arrivalStation("0").price(1.0f).build());
-                journeys.put("2", new Journey.Builder().departureStation("1").arrivalStation("2").price(1.0f).build());
-                journeys.put("3", new Journey.Builder().departureStation("1").arrivalStation("3").price(7.0f).build());
+                journeys.put("0", new Journey.Builder().departureStation("1").arrivalStation("0").price(1).build());
+                journeys.put("2", new Journey.Builder().departureStation("1").arrivalStation("2").price(1).build());
+                journeys.put("3", new Journey.Builder().departureStation("1").arrivalStation("3").price(7).build());
                 return journeys;
             }
         });
@@ -80,9 +80,9 @@ public class OptimizationAlgorithmSimpleImplTest {
             @Override
             public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 HashMap<String, Journey> journeys = new HashMap<>();
-                journeys.put("0", new Journey.Builder().departureStation("2").arrivalStation("0").price(7.0f).build());
-                journeys.put("3", new Journey.Builder().departureStation("2").arrivalStation("3").price(1.0f).build());
-                journeys.put("1", new Journey.Builder().departureStation("2").arrivalStation("1").price(1.0f).build());
+                journeys.put("0", new Journey.Builder().departureStation("2").arrivalStation("0").price(7).build());
+                journeys.put("3", new Journey.Builder().departureStation("2").arrivalStation("3").price(1).build());
+                journeys.put("1", new Journey.Builder().departureStation("2").arrivalStation("1").price(1).build());
                 return journeys;
             }
         });
@@ -91,8 +91,8 @@ public class OptimizationAlgorithmSimpleImplTest {
             @Override
             public HashMap<String, Journey> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 HashMap<String, Journey> journeys = new HashMap<>();
-                journeys.put("1", new Journey.Builder().departureStation("3").arrivalStation("1").price(7.0f).build());
-                journeys.put("2", new Journey.Builder().departureStation("3").arrivalStation("2").price(1.0f).build());
+                journeys.put("1", new Journey.Builder().departureStation("3").arrivalStation("1").price(7).build());
+                journeys.put("2", new Journey.Builder().departureStation("3").arrivalStation("2").price(1).build());
                 return journeys;
             }
         });
@@ -124,15 +124,15 @@ public class OptimizationAlgorithmSimpleImplTest {
 
                 List<Journey> journeys = new ArrayList<>();
                 if (Integer.parseInt(i) + 1 <= testCount - 1)
-                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 1)).price(7.0f).build());
+                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 1)).price(7).build());
                 if (Integer.parseInt(i) + 2 <= testCount - 1)
-                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 2)).price(6.0f).build());
+                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 2)).price(6).build());
                 if (Integer.parseInt(i) + 3 <= testCount - 1)
-                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 3)).price(5.0f).build());
+                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 3)).price(5).build());
                 if (Integer.parseInt(i) + 4 <= testCount - 1)
-                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 4)).price(8.0f).build());
+                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 4)).price(8).build());
                 if (Integer.parseInt(i) + 5 <= testCount - 1)
-                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 5)).price(10.0f).build());
+                    journeys.add(new Journey.Builder().departureStation(String.valueOf(i)).arrivalStation(String.valueOf(i + 5)).price(10).build());
 
                 return journeys;
             }

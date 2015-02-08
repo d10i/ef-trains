@@ -12,7 +12,7 @@ public class Journey {
 
     private String arrivalStation;
 
-    private float price;
+    private int price;
 
     private DateTime departureTime;
 
@@ -42,11 +42,11 @@ public class Journey {
         this.arrivalStation = arrivalStation;
     }
 
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -66,7 +66,7 @@ public class Journey {
         this.arrivalTime = arrivalTime;
     }
 
-    public float getDuration()
+    public int getDuration()
     {
         return Minutes.minutesBetween(arrivalTime, departureTime).getMinutes();
     }
@@ -85,7 +85,7 @@ public class Journey {
     public static class Builder {
         private String departureStation;
         private String arrivalStation;
-        private float price;
+        private int price;
         private DateTime departureTime;
         private DateTime arrivalTime;
 
@@ -99,7 +99,7 @@ public class Journey {
             return this;
         }
 
-        public Builder price(float price) {
+        public Builder price(int price) {
             this.price = price;
             return this;
         }

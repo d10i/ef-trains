@@ -36,7 +36,7 @@ public class JourneyResource {
 
         RouteRepresentation.Builder routeRepresentationBuilder = new RouteRepresentation.Builder();
 
-        float totalPrice = 0.0f;
+        int totalPrice = 0;
         for (Journey journey : journeys) {
             journeyRepresentation = new JourneyRepresentation.Builder().
                     departureStation(journey.getDepartureStation()).

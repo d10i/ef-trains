@@ -15,7 +15,7 @@ public class RouteRepresentation {
 
     @JsonProperty
     @NotNull
-    private float price;
+    private int price;
 
     @JsonProperty
     private Integer duration;
@@ -50,11 +50,11 @@ public class RouteRepresentation {
         this.journeys = routeRepresentationBuilder.journeys;
     }
 
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -107,7 +107,7 @@ public class RouteRepresentation {
     }
 
     public static class Builder {
-        private float price;
+        private int price;
         private Integer duration;
         private String departureStation;
         private String arrivalStation;
@@ -115,7 +115,7 @@ public class RouteRepresentation {
         private DateTime arrivalTime;
         private List<JourneyRepresentation> journeys = new ArrayList<>();
 
-        public Builder price(float price) {
+        public Builder price(int price) {
             this.price = price;
             return this;
         }

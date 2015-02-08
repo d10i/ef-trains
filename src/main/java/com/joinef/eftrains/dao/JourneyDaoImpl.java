@@ -38,7 +38,7 @@ public class JourneyDaoImpl implements JourneyDao {
                 journey = new Journey.Builder().
                         departureStation(rs.getString("departure_station")).
                         arrivalStation(rs.getString("arrival_station")).
-                        price(rs.getFloat("price")).
+                        price(rs.getInt("price")).
                         departureTime(parseDateTime(rs.getTimestamp("departure_time"))).
                         arrivalTime(parseDateTime(rs.getTimestamp("arrival_time"))).
                         build();

@@ -20,7 +20,7 @@ public class JourneyRepresentation {
     private String arrivalStation;
 
     @JsonProperty
-    private float price;
+    private int price;
 
     @JsonProperty
     @JsonDeserialize(using = DetailDateTimeDeserializer.class)
@@ -56,11 +56,11 @@ public class JourneyRepresentation {
         this.arrivalStation = arrivalStation;
     }
 
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -94,7 +94,7 @@ public class JourneyRepresentation {
     public static class Builder {
         private String departureStation;
         private String arrivalStation;
-        private float price;
+        private int price;
         private DateTime departureTime;
         private DateTime arrivalTime;
 
@@ -108,7 +108,7 @@ public class JourneyRepresentation {
             return this;
         }
 
-        public Builder price(float price) {
+        public Builder price(int price) {
             this.price = price;
             return this;
         }

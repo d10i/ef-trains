@@ -7,9 +7,9 @@ public class Edge {
 
     public final Vertex target;
 
-    public final float weight;
+    public final int weight;
 
-    public Edge(Vertex argTarget, float argWeight) {
+    public Edge(Vertex argTarget, int argWeight) {
         target = argTarget;
         weight = argWeight;
     }
