@@ -60,7 +60,7 @@ public class JourneyDaoImpl implements JourneyDao {
     }
 
     private DateTime parseDateTime(Timestamp timestamp) {
-        if (timestamp.getTime() <= 0) {
+        if (timestamp == null) {
             return null;
         }
 
