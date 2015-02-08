@@ -5,6 +5,7 @@ import com.joinef.eftrains.entity.Journey;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,23 +24,33 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
 
         List<String> stationKeys = stationDao.findAllKeys();
 
-        List<Vertex> vertices = new ArrayList<Vertex>();
+        HashMap<String, Vertex> vertices = new HashMap<String, Vertex>();
 
         for (String stationKey : stationKeys) {
             Vertex vertex = new Vertex(stationKey, journeyService);
-            vertices.add(vertex);
+            vertices.put(stationKey, vertex);
         }
 
         Vertex startVertex = vertices.get(startStation);
         Vertex endVertex = vertices.get(endStation);
+        List<Journey> resultPrice = RunDjikstra(startVertex, endVertex, vertices, OptimizationType.Price);
 
-        Dijkstra.computePaths(startVertex, vertices);
+        List<List<Journey>> output = new ArrayList<List<Journey>>();
+        output.add(resultPrice);
+
+        List<Journey> resultDuration = RunDjikstra(startVertex, endVertex, vertices, OptimizationType.Duration);
+        output.add(resultDuration);
+
+        return output;
+    }
+
+    private List<Journey> RunDjikstra(Vertex startVertex, Vertex endVertex, HashMap<String, Vertex> vertices, OptimizationType optimizationType)
+    {
+        Dijkstra.computePaths(startVertex, vertices, optimizationType);
         List<Vertex> finalPath = Dijkstra.getShortestPathTo(endVertex);
         finalPath.add(endVertex);
 
-        List<List<Journey>> output = new ArrayList<List<Journey>>();
         List<Journey> result = new ArrayList<Journey>();
-        output.add(result);
 
         int pathSize = finalPath.size();
         for(int i =0; i < pathSize - 1; i++)
@@ -50,7 +61,7 @@ public class OptimizationAlgorithmSimpleImpl implements OptimizationAlgorithm {
             result.add(journeyService.findFrom(stationOne, null).get(stationTwo));
         }
 
-        return output;
+        return result;
     }
 
     public void setJourneyService(JourneyService journeyService) {
